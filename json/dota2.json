@@ -1,0 +1,36 @@
+{
+  "name":"DOTA2",
+  "children":
+  [
+    {
+      "name":"lgd" ,
+      "children":
+      [
+        {"name":"Agressif" },
+        {"name":"Maybe" },
+        {"name":"xiao8" },
+        {"name":"MMY" },
+        {"name":"Sep" }
+      ]
+    },
+
+    {
+      "name":"Newbeen" ,
+      "children":
+      [
+        {
+          "name":"hao",
+          "children":
+          [
+            {"name":"幽鬼"},
+            {"name":"飞机"},
+            {"name":"小狗"},
+            {"name":"火猫"}
+          ]
+        },
+        {"name":"mu"},
+        {"name":"kpii"}
+      ]
+    }
+    ]
+}

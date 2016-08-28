@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  .mainBars rect{
+    shape-rendering: auto;
+    fill-opacity: 0;
+    stroke-width: 0.5px;
+    stroke: rgb(0, 0, 0);
+    stroke-opacity: 0;
+  }
+  .subBars{
+    shape-rendering:crispEdges;
+  }
+  .edges{
+    stroke:none;
+    fill-opacity:0.5;
+  }
+</style>
+<body>
+<script src="js/lib/d3.v4.min.js"></script>
+<script src="js/lib/viz.v1.1.0.min.js"></script>
+<script>
+
+  var data=[['E','CA',16,0],
+    ['A','CA',27,0],
+    ['B','CA',58,0],
+    ['C','CA',1551,15],
+    ['D','CA',141,0],
+    ['E','AZ',5453,35],
+    ['A','AZ',862,0],
+    ['C','AZ',6228,30],
+    ['E','AL',15001,449],
+    ['A','AL',836,0],
+    ['B','AL',28648,1419],
+    ['C','AL',3,0],
+    ['E','CO',13,0],
+    ['A','CO',362,0],
+    ['B','CO',78,10],
+    ['C','CO',2473,32],
+    ['D','CO',2063,64],
+    ['A','DE',203,0],
+    ['C','DE',686,2],
+    ['D','DE',826,0],
+    ['E','KS',1738,110],
+    ['A','KS',15413,0],
+    ['B','GA',348,3],
+    ['C','GA',4244,18],
+    ['D','GA',1536,1],
+    ['C','IA',405,1],
+    ['A','IL',127,0],
+    ['C','IL',1470,7],
+    ['D','IL',516,1],
+    ['C','IN',1380,5],
+    ['D','IN',791,23],
+    ['C','MD',1171,2],
+    ['C','MS',457,2],
+    ['C','ME',10782,33],
+    ['D','ME',1911,3],
+
+  ];
+  var color ={D:"#3366CC", C:"#DC3912",  E:"#FF9900", A:"#109618", B:"#990099", E:"#0099C6"};
+  var svg = d3.select("body").append("svg").attr("width", 280).attr("height", 280);
+  var g = svg.append("g").attr("transform","translate(50,0)");
+
+  var bp=viz.bP()
+                  .data(data)
+                  .min(12)
+                  .pad(1)
+                  .height(280)
+                  .width(200)
+                  .barSize(15)
+                  .fill(d=>color[d.primary]);
+
+  g.call(bp);
+
+  g.selectAll(".mainBars")
+          .on("mouseover",mouseover)
+          .on("mouseout",mouseout)
+
+  g.selectAll(".mainBars").append("text").attr("class","label")
+          .attr("x",d=>(d.part=="primary"? -30: 20))
+  .attr("y",d=>+6)
+  .text(d=>d.key)
+  .attr("text-anchor",d=>(d.part=="primary"? "end": "start"));
+
+  g.selectAll(".mainBars").append("text").attr("class","perc")
+          .attr("x",d=>(d.part=="primary"? -90: 40))
+  .attr("y",d=>+6)
+  .text(function(d){ return d3.format("0.0%")(d.percent)})
+          .attr("text-anchor",d=>(d.part=="primary"? "end": "start"));
+
+  function mouseover(d){
+    bp.mouseover(d);
+    g.selectAll(".mainBars")
+            .select(".perc")
+            .text(function(d){ return d3.format("0.0%")(d.percent)})
+  }
+  function mouseout(d){
+    bp.mouseout(d);
+    g.selectAll(".mainBars")
+            .select(".perc")
+            .text(function(d){ return d3.format("0.0%")(d.percent)})
+  }
+  d3.select(self.frameElement).style("height", "300px");
+</script>
+</body>
+</html>

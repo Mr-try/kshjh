@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>Smoothed D3.js Radar Chart</title>
+
+  <script src="js/lib/d3.v3.min.js" charset="utf-8"></script>
+
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      fill: #242424;
+      text-align: center;
+      text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+      cursor: default;
+    }
+
+    .legend {
+      font-family: 'Raleway', sans-serif;
+      fill: #333333;
+    }
+
+    .tooltip {
+      fill: #333333;
+    }
+  </style>
+
+</head>
+<body>
+
+<div class="radarChart"></div>
+
+<script src="js/lib/radarChart.js"></script>
+<script>
+  var margin = {top: 100, right: 100, bottom: 100, left: 100},
+          width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+          height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+  var data = [
+    [//iPhone
+      {axis:"A",value:0.22},
+      {axis:"B",value:0.28},
+      {axis:"C",value:0.29},
+      {axis:"D",value:0.17},
+      {axis:"E",value:0.22},
+      {axis:"F",value:0.02},
+      {axis:"G",value:0.21},
+      {axis:"H",value:0.50}
+    ],[//Samsung
+      {axis:"A",value:0.27},
+      {axis:"B",value:0.16},
+      {axis:"C",value:0.35},
+      {axis:"D",value:0.13},
+      {axis:"E",value:0.20},
+      {axis:"F",value:0.13},
+      {axis:"G",value:0.35},
+      {axis:"H",value:0.38}
+    ],[//Nokia Smartphone
+      {axis:"A",value:0.26},
+      {axis:"B",value:0.10},
+      {axis:"C",value:0.30},
+      {axis:"D",value:0.14},
+      {axis:"E",value:0.22},
+      {axis:"F",value:0.04},
+      {axis:"G",value:0.41},
+      {axis:"H",value:0.30}
+    ]
+  ];
+  var color = d3.scale.ordinal()
+          .range(["#EDC951","#CC333F","#00A0B0"]);
+
+  var radarChartOptions = {
+    w: width,
+    h: height,
+    margin: margin,
+    maxValue: 0.5,
+    levels: 5,
+    roundStrokes: true,
+    color: color
+  };
+  //Call function to draw the Radar chart
+  RadarChart(".radarChart", data, radarChartOptions);
+</script>
+</body>
+</html>

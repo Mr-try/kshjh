@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>My lab 3</title>
+  <style>
+
+    @import url(../style.css?aea6f0a);
+
+    #circle circle {
+      fill: none;
+      pointer-events: all;
+    }
+
+    .group path {
+      fill-opacity: .5;
+    }
+
+    path.chord {
+      stroke: #000;
+      stroke-width: .25px;
+    }
+
+    #circle:hover path.fade {
+      display: none;
+    }
+
+    .Director {
+      fill: navy;
+    }
+
+    .CEO {
+      fill: black;
+    }
+
+    #group3, #group6, #group7, #group8 {
+      fill: #00FF7F;
+    }
+    #group4, #group9, #group10, #group11, #group12, #group13, #group14 {
+      fill: #DAA520;
+    }
+    #group5, #group16, #group17, #group15 {
+      fill: #FF00FF;
+    }
+  </style>
+</head>
+
+<body>
+<script src="js/lib/d3.v3.min.js" charset="utf-8"></script>
+<script src="js/lib/queue.v1.min.js"></script>
+<script>
+  var matrix = new Array(18);
+
+  var width = 720,
+          height = 720,
+          outerRadius = Math.min(width, height) / 2 - 10,
+          innerRadius = outerRadius - 24;   // 设置布局的长宽，半径
+
+  var formatPercent = d3.format(".1%");
+
+  var layout = d3.layout.chord()    // 从关系矩阵生成一个弦图，创建弦图布局，用来转换数据
+          .padding(.04)     // 取得或设置 弦片段间的角填充
+          .sortSubgroups(d3.descending)     // 取得或设置 用于子分组的比较器
+          .sortChords(d3.ascending);    // 取得或设置 用于弦的比较器（Z轴顺序）
+
+  var arc = d3.svg.arc()      // 新建一个弧度生成器，用来画弧
+          .innerRadius(innerRadius)     // 设置内半径访问器
+          .outerRadius(outerRadius);    // 设置外半径访问器
+
+  var path = d3.svg.chord()     // 新建一个弦生成器，用来画弦
+          .radius(innerRadius);
+
+  var svg = d3.select("body").append("svg")     // 生成最父节点
+          .attr("width", width)
+          .attr("height", height)
+          .append("g")
+          .attr("id", "circle")
+          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");    // 坐标原点移到svg中间
+
+  svg.append("circle")
+          .attr("r", outerRadius);    // 画外圈的大圆，g的第一个孩子
+
+  queue()
+          .defer(d3.csv, "json/staff.csv")
+          .defer(d3.csv, "json/mail.csv")
+          .await(ready);    // 加载两个文件，之后执行回掉函数ready
+
+  function ready(error, staffs, mails) {
+    if (error) throw error;
+
+    // 生成数据矩阵
+    for (var i = 0; i < 18; i++)
+    {
+      matrix[i] = new Array(18);
+      for (var j = 0; j < 18; j++)
+      {
+        matrix[i][j] = 0;
+      }
+    }
+
+    for (var i = 0; i < mails.length; i++)
+    {
+      var toid1 = parseInt(mails[i].toID);
+      var id2 = parseInt(mails[i].ID);
+      var num = parseInt(mails[i].Weight);
+      matrix[toid1][id2] = num;
+    }
+    // Compute the chord layout. 加载数据矩阵
+    layout.matrix(matrix);
+
+    // Add a group per neighborhood. 就是每一个扇环形区域，都是一个group，包括title、path（arc）、text三个孩子
+    var group = svg.selectAll(".group")
+            .data(layout.groups)    // layout = d3.layout.chord() ，所以layout是个chord；
+            // chord.group()返回节点数组，用来生成节点：一个个弧
+            .enter().append("g")
+            .attr("class", "group")
+            .on("mouseover", mouseover);    // 放上鼠标后调用mouseover函数
+
+
+    // Add a mouseover title. 鼠标停留显示的提示
+    group.append("title").text(function(d, i) { return staffs[i].Name + "'s inbox"; });
+
+    // Add the group arc. 画弧
+    var groupPath = group.append("path")
+            .attr("id", function(d, i) { return "group" + i; })   // 每个扇环形区域是一个group，其中的path叫group i
+            .attr("d", arc)
+            .attr("class", function(d, i) { return staffs[i].Position; });
+
+
+    // Add a text label. 添加文本标识
+    var groupText = group.append("text")
+            .attr("x", 6)
+            .attr("dy", 15);
+
+    groupText.append("textPath")
+            .attr("xlink:href", function(d, i) { return "#group" + i; })
+            .text( function(d, i) { return staffs[i].Name; } );
+
+    // Remove the labels that don't fit. :(
+    groupText.filter(function(d, i) { return groupPath[0][i].getTotalLength() / 2 - 16 < this.getComputedTextLength(); })
+            .remove();
+
+
+    // Add the chords. 每条连接两个邻居的边都是一个path，拥有一个title孩子，所有的边在一起叫chord
+    var chord = svg.selectAll(".chord")
+            .data(layout.chords)
+            .enter().append("path")
+            .attr("class", "chord")
+            .style("fill", "#1E90FF")
+            .attr("d", path);
+
+    // Add an elaborate mouseover title for each chord. 设置path的title
+    // chord.append("title").text("haha");
+
+    // 在此函数中，所有不是source也不是target的全都设"fade"为true
+    function mouseover(d, i) {
+      chord.classed("fade", function(p) {
+        return p.source.index != i
+                && p.target.index != i;
+      });
+    }
+  }
+</script>
+</body>
+</html>

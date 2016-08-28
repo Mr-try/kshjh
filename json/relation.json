@@ -1,0 +1,21 @@
+﻿{
+"nodes":[
+{ "name": "C" ,"class":"father","id":"001"},
+{ "name": "H","class":"son","id":"002"},
+{ "name": "H","class":"son","id":"003"},
+{ "name": "H","class":"son","id":"004"},
+{ "name": "C","class":"father","id":"005"},
+{ "name": "H","class":"son","id":"006"},
+{ "name": "H","class":"son","id":"007"},
+{ "name": "H","class":"son","id":"008"}
+],
+"edges":[
+{ "source": "001" , "target": "005" , "relation":"碳碳键" },
+{ "source": "001" , "target": "002" , "relation":"碳氢键" },
+{ "source": "001" , "target": "003" , "relation":"碳氢键" },
+{ "source": "001" , "target": "004" , "relation":"碳氢键" },
+{ "source": "005" , "target": "006" , "relation":"碳氢键" },
+{ "source": "005" , "target": "007" , "relation":"碳氢键" },
+{ "source": "005" , "target": "008" , "relation":"碳氢键" }
+]
+}

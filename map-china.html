@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+   <div id="container" style="height: 400px;width: 400px;margin-left: 400px"></div>
+   <script type="text/javascript" src="js/lib/jquery.min.js"></script>
+   <script type="text/javascript" src="js/lib/echarts.min.js"></script>
+   <script type="text/javascript">
+        $.get('json/minhou.json',function (geoJson) {
+            echarts.registerMap('minhou',geoJson);
+            var chart =echarts.init(document.getElementById("container")) ;
+
+            chart.setOption(option = {
+                geo: {
+                    map: 'minhou',
+                    label: {
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    roam: true,
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#323c48',
+                            borderColor: '#404a59'
+                        },
+                        emphasis: {
+                            areaColor: '#2a333d'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'lines',
+                        zlevel: 3,
+                        effect: {
+                            show: true,
+                            period: 6,
+                            trailLength: 0.7,
+                            color: '#fff',
+                            symbolSize: 3
+                        },
+                        name: 'minhou',
+                        data:[
+                            {name:"白沙镇1",coords:[[119.080166,26.21231],[119.546047,26.20372]]},
+                            {name:"南屿镇1",coords:[[119.201168,25.96307],[118.939012,25.873001]]},
+                            {name:"尚干镇1",coords:[[119.353993,25.937975],[,119.529679,25.969187]]},
+                            {name:"祥谦镇1",coords:[[119.394118,25.936262],[119.508619,25.936327]]},
+                            {name:"青口镇1",coords:[[119.344998,25.886345],[119.390575,25.726485]]},
+                            {name:"南通镇1",coords:[[119.264834,25.939154],[119.036999,25.775927]]},
+                            {name:"竹岐乡1",coords:[[119.09407,26.134346],[119.335,26.0870590000]]},
+                            {name:"鸿尾乡1",coords:[[118.992743,26.16756],[118.719186,26.182237]]},
+                            {name:"洋里乡1",coords:[[118.967365,26.366018],[118.752638,26.283282]]},
+                            {name:"大湖乡1",coords:[[119.102036,26.368099],[119.559984,26.50809]]},
+                            {name:"廷坪乡1",coords:[[119.067458,26.522187],[118.773515,26.5716680000]]},
+                            {name:"小箬乡1",coords:[[118.914237,26.279951],[118.870096,26.226819]]}
+                        ],
+                        lineStyle: {
+                            normal: {
+                                color: "#008B8B",
+                                width: 1,
+                                opacity: 0.4,
+                                curveness: 0.2
+                            }
+                        }
+                    }]
+            })
+        })
+
+       </script>
+   </body>
+</html>
