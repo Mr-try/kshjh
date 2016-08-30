@@ -11,14 +11,18 @@
   <script type="text/javascript" src="js/lidao.js"></script>
   <style>
     .nodelabel{
-      font-size: 10px;
+      font-size: 6px;
       font-weight: normal;
+      fill:white;
     }
   </style>
 </head>
-<body>
-<div class="chart">
-  <div class="chart-body" id="chart01"></div>
-</div>
+<body style="background-color: #f3f3f3">
+  <svg id="chart01" style="background-color: #fff"></svg>
+  <div class="rightframe" style="float: right" >
+    <input type="text" placeholder="请输入公司名" id="companyname">
+    <button id="search">提交</button>
+    <div id="errormsg" style="color: red"></div>
+  </div>
 </body>
 </html>
